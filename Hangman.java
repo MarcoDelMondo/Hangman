@@ -2,6 +2,8 @@ import java.util.*;
 import java.io.*;
 
 public class Hangman {
+
+	// ArrayLists to store words, high scores, and player names
 	static ArrayList<String> Word = new ArrayList<String>();
 	static ArrayList<Integer> HighScore = new ArrayList<Integer>();
 	static ArrayList<String> Name = new ArrayList<String>();
@@ -16,12 +18,14 @@ public class Hangman {
 		ArrayList<Character> Correct = new ArrayList<Character>();
 		ArrayList<Character> Incorrect = new ArrayList<Character>();
 		try {
+			// Reading the dictionary
 			readDictionary("res/dictionary.txt");
+			// Print _ for each character in the word
 			System.out.print("Hidden Word: ");
 			for (int i = 0; i < Word.get(wordChoice).length(); i++) {
 				System.out.print(" _ ");
 			}
-			while (run == true) {
+			while (run) {
 				String guess = input.next().toUpperCase();
 				Character charGuess = guess.charAt(0);
 				if (guess.length() > 1) {
@@ -31,6 +35,7 @@ public class Hangman {
 					System.out.println("You've already guessed " + charGuess);
 					System.out.println("Please try again");
 				} else if (guess.length() == 1) {
+					// Check if the guessed letter is in the word
 					for (int i = 0; i < Word.get(wordChoice).length(); i++) {
 						if (Word.get(wordChoice).charAt(i) == charGuess) {
 							Correct.add(charGuess);
@@ -44,6 +49,7 @@ public class Hangman {
 						Collections.sort(Incorrect);
 						guesses--;
 					}
+					// Display player progress
 					System.out.print("Hidden Word: ");
 					for (int i = 0; i < Word.get(wordChoice).length(); i++) {
 						if (Word.get(wordChoice).charAt(i) == charGuess) {
@@ -67,6 +73,7 @@ public class Hangman {
 					System.out.println("Enter Next Guess: ");
 				}
 				if (guesses == 0) {
+					// Game over due to running out of guesses
 					System.out.println("You are out of guesses!");
 					System.out.println("Your word was: " + Word.get(wordChoice));
 					System.out.println("Your Score: " + score);
@@ -75,6 +82,7 @@ public class Hangman {
 					displayHighScores();
 					run = false;
 				} else if (tempScore / 10 == Word.get(wordChoice).length()) {
+					// Win condition, player guessed word correctly
 					System.out.println("You guessed correctly! Your word was: " + Word.get(wordChoice));
 					score += 100;
 					score += 30 * guesses;
@@ -96,6 +104,7 @@ public class Hangman {
 		input.close();
 	}
 
+	// Reads words from dictionary.txt file
 	public static void readDictionary(String filename) throws FileNotFoundException {
 		File file = new File(filename);
 		Scanner input = new Scanner(file);
@@ -107,6 +116,7 @@ public class Hangman {
 		input.close();
 	}
 
+	// Reads high scores from highscores.txt file
 	public static void readHighScores() throws FileNotFoundException {
 		File file = new File("res/highscores.txt");
 		Scanner read = new Scanner(file);
@@ -119,6 +129,7 @@ public class Hangman {
 		read.close();
 	}
 
+	// Saves the player's score if it is a new high score
 	public static void saveHighScore() {
 		try {
 			File file = new File("res/highscores.txt");
@@ -152,6 +163,7 @@ public class Hangman {
 		}
 	}
 
+	// Displays the high scores
 	public static void displayHighScores() {
 		try {
 			File file = new File("res/highscores.txt");
